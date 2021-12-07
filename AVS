@@ -1,0 +1,548 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.1
+-- Dumped by pg_dump version 14.1
+
+-- Started on 2021-12-07 16:15:35 EST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 209 (class 1259 OID 32777)
+-- Name: customer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.customer (
+    cid integer NOT NULL,
+    name character varying(20) NOT NULL,
+    city character varying(20) NOT NULL,
+    phone_num character(10) NOT NULL,
+    age integer,
+    gender character(1),
+    CONSTRAINT customer_age_check CHECK (((age >= 21) AND (age <= 100)))
+);
+
+
+ALTER TABLE public.customer OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 32789)
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.orders (
+    order_id integer NOT NULL,
+    cid integer NOT NULL,
+    ref_num integer NOT NULL,
+    order_price bigint NOT NULL,
+    discount integer,
+    CONSTRAINT orders_order_price_check CHECK ((order_price > 0))
+);
+
+
+ALTER TABLE public.orders OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 32783)
+-- Name: payments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.payments (
+    ref_num integer NOT NULL,
+    account character varying(10) NOT NULL,
+    country character varying(20),
+    paid_amt bigint,
+    CONSTRAINT payments_country_check CHECK ((((country)::text = 'usa'::text) OR ((country)::text = 'india'::text)))
+);
+
+
+ALTER TABLE public.payments OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 32805)
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    pid character varying(7) NOT NULL,
+    type character varying(15) NOT NULL,
+    fabric character varying(15) NOT NULL,
+    color character varying(10) NOT NULL,
+    purchase_price bigint
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 32818)
+-- Name: purchase; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.purchase (
+    cid integer NOT NULL,
+    pid character varying(7) NOT NULL
+);
+
+
+ALTER TABLE public.purchase OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 32810)
+-- Name: shipping; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.shipping (
+    pid character varying(7) NOT NULL,
+    shipping_date character varying(10) NOT NULL,
+    delivery_date character varying(10),
+    price bigint,
+    tracking_num integer
+);
+
+
+ALTER TABLE public.shipping OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 32831)
+-- Name: supplier; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.supplier (
+    sup_id integer NOT NULL,
+    sup_name character varying(20)
+);
+
+
+ALTER TABLE public.supplier OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 32836)
+-- Name: temp1; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.temp1 (
+    pid character varying(7),
+    cid integer,
+    shipping_date character varying(10),
+    delivery_date character varying(10),
+    price bigint,
+    tracking_num integer
+);
+
+
+ALTER TABLE public.temp1 OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 32839)
+-- Name: temp2; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.temp2 (
+    cid integer
+);
+
+
+ALTER TABLE public.temp2 OWNER TO postgres;
+
+--
+-- TOC entry 3619 (class 0 OID 32777)
+-- Dependencies: 209
+-- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (1, 'lavanya', 'Chicago', '7716364146', 22, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (2, 'Sarada', 'denver', '6963265738', 45, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (3, 'shwetha', 'khammam', '7223597070', 35, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (4, 'kusum', 'south Lyon', '9287568444', 34, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (5, 'asha', 'Delaware', '6478204591', 43, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (6, 'Sureka', 'Los Angles', '7409400691', 31, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (7, 'Rekha', 'hyderabad', '9767424347', 21, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (8, 'avani', 'Los Angles', '6992246263', 27, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (9, 'salma', 'Khammam', '7229031682', 44, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (10, 'mahitha ', 'wisconson', '3665421230', 39, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (11, 'blue banaras ', 'wisconson', '3984510224', 24, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (12, 'vani ', 'novi', '4020324558', 33, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (13, 'neeha ', 'texas', '4452077770', 25, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (14, 'anita ', 'usa', '9051019845', 38, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (15, 'sravanthi ', 'india', '6270949590', 43, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (16, 'sravya ', 'chittor', '9340019481', 29, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (17, 'chandana ', 'dallas', '2584755386', 31, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (18, 'georgette paithani ', 'wisconson', '8052151074', 27, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (19, 'shilpa ', 'texas', '4472243810', 36, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (20, 'deepika ', 'north carolina', '3033870607', 24, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (21, 'priya ', 'washington', '961155242 ', 38, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (22, 'sridevi ', 'Kalamazoo', '8817995849', 42, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (23, 'akila ', 'SFO', '7304357384', 37, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (24, 'spoorthy ', 'hyderabad', '6759540459', 38, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (25, 'swathi ', 'wisconson', '2394676547', 23, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (26, 'namrata ', 'boston', '4308483911', 28, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (27, 'roopa ', 'texas', '3892835953', 31, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (28, 'anusha ', 'san jose', '8111961964', 29, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (29, 'swaroopa ', 'fremont', '3924065231', 26, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (30, 'Alekhya ', 'Michigan', '2659700357', 30, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (31, 'bhanu ', 'texas', '9131387693', 37, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (32, 'vani ', 'novi', '6042639071', 34, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (33, 'Manju ', 'newjersy', '6002225625', 32, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (34, 'Priyanka ', 'Nevada', '2835973491', 24, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (35, 'swetha tholeti ', 'novi', '8020665689', 28, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (36, 'Bhavya vanga ', 'Virginia', '9546455518', 30, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (37, 'swapna ', 'Virginia', '3715401134', 21, 'f');
+INSERT INTO public.customer (cid, name, city, phone_num, age, gender) VALUES (38, 'ritu ', 'Michigan', '6232285930', 23, 'f');
+
+
+--
+-- TOC entry 3621 (class 0 OID 32789)
+-- Dependencies: 211
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10001, 1, 101, 145, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10002, 2, 102, 120, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10003, 3, 103, 195, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10004, 4, 104, 167, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10005, 5, 105, 245, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10006, 6, 106, 215, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10007, 7, 107, 175, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10008, 8, 108, 163, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10009, 9, 109, 225, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10010, 10, 110, 219, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10011, 11, 111, 345, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10012, 12, 112, 169, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10013, 13, 113, 195, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10014, 14, 114, 229, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10015, 15, 115, 185, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10016, 16, 116, 193, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10017, 17, 117, 121, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10018, 18, 118, 144, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10019, 19, 119, 165, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10020, 20, 120, 187, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10021, 21, 121, 134, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10022, 22, 122, 157, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10023, 23, 123, 186, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10024, 24, 124, 256, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10025, 25, 125, 175, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10026, 26, 126, 256, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10027, 27, 127, 329, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10028, 28, 128, 278, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10029, 29, 129, 299, NULL);
+INSERT INTO public.orders (order_id, cid, ref_num, order_price, discount) VALUES (10030, 30, 130, 314, NULL);
+
+
+--
+-- TOC entry 3620 (class 0 OID 32783)
+-- Dependencies: 210
+-- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (101, 'chase bank', 'usa', 145);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (102, 'chase bank', 'usa', 120);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (103, 'axis bank', 'india', 195);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (104, 'chase bank', 'usa', 167);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (105, 'chase bank', 'usa', 245);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (106, 'chase bank', 'usa', 215);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (107, 'axis bank', 'india', 175);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (108, 'axis bank', 'india', 163);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (109, 'chase bank', 'usa', 225);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (110, 'chase bank', 'usa', 219);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (111, 'chase bank', 'usa', 345);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (112, 'chase bank', 'usa', 169);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (113, 'chase bank', 'usa', 195);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (114, 'chase bank', 'usa', 229);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (115, 'chase bank', 'usa', 185);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (116, 'chase bank', 'usa', 193);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (117, 'chase bank', 'usa', 121);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (118, 'chase bank', 'usa', 144);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (119, 'chase bank', 'usa', 165);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (120, 'chase bank', 'usa', 187);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (121, 'chase bank', 'usa', 134);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (122, 'axis bank', 'india', 157);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (123, 'axis bank', 'india', 186);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (124, 'axis bank', 'india', 256);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (125, 'axis bank', 'india', 175);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (126, 'chase bank', 'usa', 256);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (127, 'chase bank', 'usa', 329);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (128, 'chase bank', 'usa', 278);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (129, 'chase bank', 'usa', 299);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (130, 'chase bank', 'usa', 314);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (131, 'chase bank', 'usa', 297);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (132, 'chase bank', 'usa', 125);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (133, 'chase bank', 'usa', 179);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (134, 'chase bank', 'usa', 345);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (135, 'chase bank', 'usa', 315);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (136, 'chase bank', 'usa', 267);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (137, 'chase bank', 'usa', 298);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (138, 'chase bank', 'usa', 356);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (139, 'chase bank', 'usa', 297);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (140, 'chase bank', 'usa', 399);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (141, 'chase bank', 'usa', 176);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (142, 'chase bank', 'usa', 133);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (143, 'axis bank', 'india', 149);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (144, 'axis bank', 'india', 159);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (145, 'axis bank', 'india', 196);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (146, 'chase bank', 'usa', 275);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (147, 'chase bank', 'usa', 266);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (148, 'chase bank', 'usa', 254);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (149, 'chase bank', 'usa', 289);
+INSERT INTO public.payments (ref_num, account, country, paid_amt) VALUES (150, 'chase bank', 'usa', 335);
+
+
+--
+-- TOC entry 3622 (class 0 OID 32805)
+-- Dependencies: 212
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku1', 'saree', 'organza', 'yellow', 123);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku2', 'saree', 'silk', 'white', 145);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku3', 'babyclothes', 'georgette', 'orange', 134);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku4', 'dress', 'chiffon', 'red', 96);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku5', 'saree', 'banaras', 'blue', 78);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku6', 'dress', 'silk', 'pink', 225);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku7', 'dress', 'organza', 'yellow', 166);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku8', 'babyclothes', 'chiffon', 'pink', 136);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku9', 'saree', 'georgette', 'orange', 111);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku10', 'saree', 'chiffon', 'pink', 214);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku11', 'dress', 'goergette', 'white', 341);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku12', 'dress', 'silk', 'blue', 132);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku13', 'babyclothes', 'organza', 'yellow', 66);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku14', 'saree', 'silk', 'red', 88);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku15', 'saree', 'banaras', 'blue', 118);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku16', 'saree', 'chiffon', 'orange', 215);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku17', 'saree', 'chiffon', 'white', 225);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku18', 'dress', 'georgette', 'orange', 265);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku19', 'dress', 'silk', 'orange', 167);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku20', 'babyclothes', 'organza', 'red', 132);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku21', 'babyclothes', 'banaras', 'white', 149);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku22', 'dress', 'chiffon', 'pink', 150);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku23', 'dress', 'silk', 'yellow', 185);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku24', 'saree', 'banaras', 'blue', 195);
+INSERT INTO public.products (pid, type, fabric, color, purchase_price) VALUES ('sku25', 'saree', 'organza', 'orange', 65);
+
+
+--
+-- TOC entry 3624 (class 0 OID 32818)
+-- Dependencies: 214
+-- Data for Name: purchase; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.purchase (cid, pid) VALUES (34, 'sku1');
+INSERT INTO public.purchase (cid, pid) VALUES (21, 'sku2');
+INSERT INTO public.purchase (cid, pid) VALUES (11, 'sku3');
+INSERT INTO public.purchase (cid, pid) VALUES (16, 'sku4');
+INSERT INTO public.purchase (cid, pid) VALUES (19, 'sku5');
+INSERT INTO public.purchase (cid, pid) VALUES (22, 'sku6');
+INSERT INTO public.purchase (cid, pid) VALUES (34, 'sku7');
+INSERT INTO public.purchase (cid, pid) VALUES (29, 'sku8');
+INSERT INTO public.purchase (cid, pid) VALUES (30, 'sku9');
+INSERT INTO public.purchase (cid, pid) VALUES (9, 'sku10');
+INSERT INTO public.purchase (cid, pid) VALUES (4, 'sku11');
+INSERT INTO public.purchase (cid, pid) VALUES (12, 'sku12');
+INSERT INTO public.purchase (cid, pid) VALUES (17, 'sku13');
+INSERT INTO public.purchase (cid, pid) VALUES (21, 'sku14');
+INSERT INTO public.purchase (cid, pid) VALUES (18, 'sku15');
+INSERT INTO public.purchase (cid, pid) VALUES (19, 'sku16');
+INSERT INTO public.purchase (cid, pid) VALUES (23, 'sku17');
+INSERT INTO public.purchase (cid, pid) VALUES (38, 'sku18');
+INSERT INTO public.purchase (cid, pid) VALUES (33, 'sku19');
+INSERT INTO public.purchase (cid, pid) VALUES (26, 'sku20');
+INSERT INTO public.purchase (cid, pid) VALUES (32, 'sku21');
+INSERT INTO public.purchase (cid, pid) VALUES (34, 'sku22');
+INSERT INTO public.purchase (cid, pid) VALUES (2, 'sku23');
+INSERT INTO public.purchase (cid, pid) VALUES (7, 'sku24');
+INSERT INTO public.purchase (cid, pid) VALUES (11, 'sku25');
+
+
+--
+-- TOC entry 3623 (class 0 OID 32810)
+-- Dependencies: 213
+-- Data for Name: shipping; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku22', '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku19', '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku4', '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku5', '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku9', '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku20', '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku11', '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku14', '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku18', '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku15', '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku3', '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku25', '17/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku12', '18/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku10', '22/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku17', '25/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku16', '27/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku1', '29/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku6', '30/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku8', '30/1/2020', NULL, NULL, NULL);
+INSERT INTO public.shipping (pid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku23', '31/1/2020', NULL, NULL, NULL);
+
+
+--
+-- TOC entry 3625 (class 0 OID 32831)
+-- Dependencies: 215
+-- Data for Name: supplier; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1001, 'esh');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1002, 'mrtrendy');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1003, 'anita resellers');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1004, 'vijaya resellers');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1005, 'vgs');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1006, 'saree sutra');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1007, 'royal fabrics');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1008, 'suryansh fab');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1009, 'devi');
+INSERT INTO public.supplier (sup_id, sup_name) VALUES (1010, 'dua fabrics');
+
+
+--
+-- TOC entry 3626 (class 0 OID 32836)
+-- Dependencies: 216
+-- Data for Name: temp1; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku1', 34, '29/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku3', 11, '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku4', 16, '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku5', 19, '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku6', 22, '30/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku8', 29, '30/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku9', 30, '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku10', 9, '22/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku11', 4, '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku12', 12, '18/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku14', 21, '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku15', 18, '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku16', 19, '27/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku17', 23, '25/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku18', 38, '15/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku19', 33, '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku20', 26, '12/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku22', 34, '11/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku23', 2, '31/1/2020', NULL, NULL, NULL);
+INSERT INTO public.temp1 (pid, cid, shipping_date, delivery_date, price, tracking_num) VALUES ('sku25', 11, '17/1/2020', NULL, NULL, NULL);
+
+
+--
+-- TOC entry 3627 (class 0 OID 32839)
+-- Dependencies: 217
+-- Data for Name: temp2; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3466 (class 2606 OID 32782)
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_pkey PRIMARY KEY (cid);
+
+
+--
+-- TOC entry 3470 (class 2606 OID 32794)
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (order_id);
+
+
+--
+-- TOC entry 3468 (class 2606 OID 32788)
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT payments_pkey PRIMARY KEY (ref_num);
+
+
+--
+-- TOC entry 3472 (class 2606 OID 32809)
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (pid);
+
+
+--
+-- TOC entry 3474 (class 2606 OID 32835)
+-- Name: supplier supplier_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.supplier
+    ADD CONSTRAINT supplier_pkey PRIMARY KEY (sup_id);
+
+
+--
+-- TOC entry 3475 (class 2606 OID 32795)
+-- Name: orders orders_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_cid_fkey FOREIGN KEY (cid) REFERENCES public.customer(cid);
+
+
+--
+-- TOC entry 3476 (class 2606 OID 32800)
+-- Name: orders orders_ref_num_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_ref_num_fkey FOREIGN KEY (ref_num) REFERENCES public.payments(ref_num);
+
+
+--
+-- TOC entry 3478 (class 2606 OID 32821)
+-- Name: purchase purchase_cid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.purchase
+    ADD CONSTRAINT purchase_cid_fkey FOREIGN KEY (cid) REFERENCES public.customer(cid);
+
+
+--
+-- TOC entry 3479 (class 2606 OID 32826)
+-- Name: purchase purchase_pid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.purchase
+    ADD CONSTRAINT purchase_pid_fkey FOREIGN KEY (pid) REFERENCES public.products(pid);
+
+
+--
+-- TOC entry 3477 (class 2606 OID 32813)
+-- Name: shipping shipping_pid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.shipping
+    ADD CONSTRAINT shipping_pid_fkey FOREIGN KEY (pid) REFERENCES public.products(pid);
+
+
+-- Completed on 2021-12-07 16:15:35 EST
+
+--
+-- PostgreSQL database dump complete
+--
+
